@@ -5,15 +5,15 @@
 {% endblock %}
 
 {% block main %}
-    <main class="container py-5">
+    <main>
         <h1>Détails utilisateur</h1>
-        <div class="card mt-3" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">{{ user.getFirstName() }} {{ user.getLastName() }}</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary">{{ user.getEmail() }}</h6>
-                <p class="card-text">{{ user.getRole() }}</p>
-                <a href="index.php?route=update&id=" class="card-link">Modifier</a>
-                <a href="index.php?route=delete&id=" class="card-link">Supprimer</a>
+        <div style="width: 18rem;">
+            <div>
+                <h5>{{ user.getFirstName() }} {{ user.getLastName() }}</h5>
+                <h6>{{ user.getEmail() }}</h6>
+                <p>{{ user.getRole() }}</p>
+                <a href="index.php?route=update&id=">Modifier</a>
+                <a href="index.php?route=delete&id=">Supprimer</a>
             </div>
         </div>
     </main>

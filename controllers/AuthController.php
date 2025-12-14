@@ -4,46 +4,21 @@ class AuthController extends AbstractController
 {
     public function home() : void
     {
-        $this->render('home/home.html.twig', []);
-    }
-
-    public function transport() :void
-    {
         if (!isset($_SESSION['email'])){
             $this->redirect('index.php?route=login');
         }
         else{
-            $this->render('member/transport.html.twig', []);
+            $this->render('home/home.html.twig', []);
         }
     }
 
-    public function housing() :void
+    public function newExpense() :void
     {
         if (!isset($_SESSION['email'])){
-            $this->redirect('index.php?route=login');
+            $this->redirect('index.php?route=newExpense');
         }
         else{
-            $this->render('member/housing.html.twig', []);
-        }
-    }
-
-    public function food() :void
-    {
-        if (!isset($_SESSION['email'])){
-            $this->redirect('index.php?route=login');
-        }
-        else{
-            $this->render('member/food.html.twig', []);
-        }
-    }
-
-    public function outing() :void
-    {
-        if (!isset($_SESSION['email'])){
-            $this->redirect('index.php?route=login');
-        }
-        else{
-            $this->render('member/outing.html.twig', []);
+            $this->render('member/newExpense.html.twig', []);
         }
     }
 
@@ -62,7 +37,7 @@ class AuthController extends AbstractController
                     $_SESSION["email"] = $user->getEmail();
                     $_SESSION["password"] = $user->getPassword();
                     $_SESSION["userRole"] = $user->getRole();
-                    $this->render('member/profile.html.twig', []);
+                    $this->render('home/home.html.twig', []);
                 }
                 else{
                     $wrongPassword = ["Mauvais mot de passe"];

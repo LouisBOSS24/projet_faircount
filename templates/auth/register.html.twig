@@ -5,40 +5,40 @@
 {% endblock %}
 
 {% block main %}
-    <main class="py-5 container">
+    <main>
         <h1>Inscription</h1>
             {% if missingField.0 %}
                 <h4>{{ missingField.0 }}</h4>
             {% endif %}
         <form method="post" action="index.php?route=register">
-            <fieldset class="mb-3">
-                <label for="firstName" class="form-label">Prénom</label>
-                <input type="text" name="firstName" id="firstName" class="form-control">
+            <fieldset>
+                <label for="firstName">Prénom</label>
+                <input type="text" name="firstName" id="firstName">
             </fieldset>
-            <fieldset class="mb-3">
-                <label for="lastName" class="form-label">Nom</label>
-                <input type="text" name="lastName" id="lastName" class="form-control">
+            <fieldset>
+                <label for="lastName">Nom</label>
+                <input type="text" name="lastName" id="lastName">
             </fieldset>
-            <fieldset class="mb-3">
+            <fieldset>
                 {% if alrdyUse.0 %}
                     <h4>{{ alrdyUse.0 }}</h4>
                 {% endif %}
-                <label for="email" class="form-label">Email</label>
-                <input type="email" name="email" id="email" class="form-control">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email">
             </fieldset>
-            <fieldset class="mb-3">
-                <label for="password" class="form-label">Mot de passe</label>
-                <input type="password" name="password" id="password" class="form-control">
+            <fieldset>
+                <label for="password">Mot de passe</label>
+                <input type="password" name="password" id="password">
             </fieldset>
-            <fieldset class="mb-3">
+            <fieldset>
                 {% if notSamePassword.0 %}
                     <h4>{{ notSamePassword.0 }}</h4>
                 {% endif %}
-                <label for="confirmPassword" class="form-label">Confirmez le mot de passe</label>
-                <input type="password" name="confirmPassword" id="confirmPassword" class="form-control">
+                <label for="confirmPassword">Confirmez le mot de passe</label>
+                <input type="password" name="confirmPassword" id="confirmPassword">
             </fieldset>
             <fieldset>
-                <button type="submit" class="btn btn-primary">S'inscrire</button>
+                <button type="submit">S'inscrire</button>
             </fieldset>
         </form>
     </main>

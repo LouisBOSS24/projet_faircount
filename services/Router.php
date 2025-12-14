@@ -4,10 +4,12 @@ class Router
 {
     private AuthController $ac;
     private UserController $uc;
+    private ExpenseController $ec;
     public function __construct()
     {
         $this->ac = new AuthController();
         $this->uc = new UserController();
+        $this->ec = new ExpenseController();
     }
 
     public function handleRequest() : void
@@ -22,17 +24,8 @@ class Router
             else if($_GET['route'] === 'logout') {
                 $this->ac->logout();
             }
-            else if($_GET['route'] === 'transport') {
-                $this->ac->transport();
-            }
-            else if($_GET['route'] === 'housing') {
-                $this->ac->housing();
-            }
-            else if($_GET['route'] === 'food') {
-                $this->ac->food();
-            }
-            else if($_GET['route'] === 'outing') {
-                $this->ac->outing();
+            else if($_GET['route'] === 'newExpense') {
+                $this->ec->create();
             }
             else if($_GET['route'] === 'profile') {
                 $this->uc->profile();

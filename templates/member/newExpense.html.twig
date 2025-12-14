@@ -1,0 +1,40 @@
+{% extends "layout.html.twig" %}
+
+{% block header %}
+    {% include "partials/_header.html.twig" %}
+{% endblock %}
+
+{% block main %}
+    <main>
+        {% if missingField.0 %}
+                <h4>{{ missingField.0 }}</h4>
+            {% endif %}
+        <h1>Ajouter une dépense</h1>
+        <form method="post" action="index.php?route=newExpense">
+            <fieldset>
+                <label for="title">Nom de la dépense</label>
+                <input type="text" name="title" id="title" required>
+            </fieldset>
+
+            <fieldset>
+                <label for="amount">Prix</label>
+                <input type="number" step="0.01" name="amount" id="amount" required>
+            </fieldset>
+
+            <fieldset>
+                <label for="category">Choisis une catégorie :</label>
+                <select name="category" id="category" required>
+                    <option value="">-- Choisir --</option>
+                    <option value="1">Transport</option>
+                    <option value="2">Logement</option>
+                    <option value="3">Nourriture</option>
+                    <option value="4">Sorties</option>
+                </select>
+            </fieldset>
+
+            <fieldset>
+                <button type="submit">Valider</button>
+            </fieldset>
+        </form>
+    </main>
+{% endblock %}

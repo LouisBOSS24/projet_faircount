@@ -5,10 +5,10 @@
 {% endblock %}
 
 {% block main %}
-    <main class="py-5 container">
-        <h1 class="mb-3">Liste des utilisateurs</h1>
-        <a href="index.php?route=create" class="btn btn-primary">Créer un utilisateur</a>
-        <table class="table table-striped mt-3">
+    <main>
+        <h1>Liste des utilisateurs</h1>
+        <a href="index.php?route=create">Créer un utilisateur</a>
+        <table>
             <thead>
                 <tr>
                     <th>
@@ -36,9 +36,9 @@
                     <td>{{ user.getLastName() }}</td>
                     <td>{{ user.getEmail() }}</td>
                     <td>
-                        <a href="index.php?route=show&id={{user.getId()}}" class="btn btn-info"><span class="bi bi-eye"></span></a>
-                        <a href="index.php?route=update&id={{user.getId()}}" class="btn btn-success"><span class="bi bi-pencil"></span></a>
-                        <a href="index.php?route=delete&id={{user.getId()}}" class="btn btn-danger"><span class="bi bi-trash"></span></a>
+                        <a href="index.php?route=show&id={{user.getId()}}">voir</a>
+                        <a href="index.php?route=update&id={{user.getId()}}">modifier</a>
+                        <a href="index.php?route=delete&id={{user.getId()}}">supprimer</a>
                     </td>
                 </tr>
                 {% endfor %}
