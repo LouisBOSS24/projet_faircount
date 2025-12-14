@@ -6,6 +6,114 @@
 
 {% block main %}
     <main>
-        <a href="index.php?route=newExpense">Nouvelle dépense + </a>
+        <a class="newExpense" href="index.php?route=newExpense">Nouvelle dépense + </a>
+        <a class="newPayback" href="index.php?route=newPayback">Distribution + </a>
+        <section class="dashboard">
+            <div class="expenses">
+                <div class="expense">
+                <h3>Dépenses</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    Titre
+                                </th>
+                                <th>
+                                    Prix
+                                </th>
+                                <th>
+                                    Categorie
+                                </th>
+                                <th>
+                                    Createur
+                                </th>
+                                <th>
+                                    Détails
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for expense in expenses|default([]) %}
+                            <tr>
+                                <td>{{ expense.getTitle() }}</td>
+                                <td>{{ expense.getAmount() }}€</td>
+                                <td>{{ expense.getCategoryName() }}</td>
+                                <td>{{ expense.getCreatorName() }}</td>
+                                <td><a href="index.php?route=expenseDetails">Détails</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="payback">
+                    <div class="dues-to">
+                    <h3>Vous devez</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Dû
+                                    </th>
+                                    <th>
+                                        À
+                                    </th>
+                                    <th>
+                                        Dépense
+                                    </th>
+                                    <th>
+                                        Valider
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for pb in duesTo|default([]) %}
+                                    <tr>
+                                        <td>{{ pb.getPrice() }}€</td>
+                                        <td>{{ pb.getToUserFirstName() ?: 'Utilisateur' }}</td>
+                                        <td>{{ pb.getExpenseTitle() ?: '—' }}</td>
+                                        <td><a href="index.php?route=paybackPaid&id={{ pb.getId() }}">Valider</a></td>
+                                    </tr>
+                                    {% else %}
+                                    <tr><td colspan="4">Aucun montant dû.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="dues-from">
+                    <h3>On vous doit</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Dû
+                                    </th>
+                                    <th>
+                                        De
+                                    </th>
+                                    <th>
+                                        Dépense
+                                    </th>
+                                    <th>
+                                        Valider
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for pb in duesFrom|default([]) %}
+                                    <tr>
+                                        <td>{{ pb.getPrice() }}€</td>
+                                        <td>{{ pb.getFromUserFirstName() ?: 'Utilisateur' }}</td>
+                                        <td>{{ pb.getExpenseTitle() ?: '—' }}</td>
+                                        <td><a href="index.php?route=paybackPaid&id={{ pb.getId() }}">Valider</a></td>
+                                    </tr>
+                                    {% else %}
+                                    <tr><td colspan="4">Personne ne vous doit d'argent.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 {% endblock %}

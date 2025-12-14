@@ -5,11 +5,13 @@ class Router
     private AuthController $ac;
     private UserController $uc;
     private ExpenseController $ec;
+    private PaybackController $pc;
     public function __construct()
     {
         $this->ac = new AuthController();
         $this->uc = new UserController();
         $this->ec = new ExpenseController();
+        $this->pc = new PaybackController();
     }
 
     public function handleRequest() : void
@@ -26,6 +28,12 @@ class Router
             }
             else if($_GET['route'] === 'newExpense') {
                 $this->ec->create();
+            }
+            else if($_GET['route'] === 'newPayback') {
+                $this->pc->create();
+            }
+            else if($_GET['route'] === 'paybackPaid' && isset($_GET['id'])) {
+                $this->pc->markAsPaid((int) $_GET['id']);
             }
             else if($_GET['route'] === 'profile') {
                 $this->uc->profile();

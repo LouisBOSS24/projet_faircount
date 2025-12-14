@@ -9,13 +9,19 @@ class PaybackManager extends AbstractManager
 
     public function findAll(): array
     {
-        $query = $this->db->prepare('SELECT * FROM payback');
+        $query = $this->db->prepare(
+            'SELECT p.*, ef.firstName AS from_firstName, et.firstName AS to_firstName, e.title AS expense_title
+             FROM payback p
+             LEFT JOIN users ef ON p.from_user = ef.id
+             LEFT JOIN users et ON p.to_user = et.id
+             LEFT JOIN expenses e ON p.expenses_id = e.id'
+        );
         $query->execute();
         $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
         $paybacks = [];
         foreach ($result as $item) {
-            $paybacks[] = new Payback(
+            $payback = new Payback(
                 $item['expenses_id'],
                 $item['from_user'],
                 $item['to_user'],
@@ -23,6 +29,18 @@ class PaybackManager extends AbstractManager
                 (bool)$item['payed'],
                 $item['id']
             );
+
+            if (isset($item['from_firstName']) && method_exists($payback, 'setFromUserFirstName')) {
+                $payback->setFromUserFirstName($item['from_firstName']);
+            }
+            if (isset($item['to_firstName']) && method_exists($payback, 'setToUserFirstName')) {
+                $payback->setToUserFirstName($item['to_firstName']);
+            }
+            if (isset($item['expense_title']) && method_exists($payback, 'setExpenseTitle')) {
+                $payback->setExpenseTitle($item['expense_title']);
+            }
+
+            $paybacks[] = $payback;
         }
 
         return $paybacks;
@@ -77,11 +95,11 @@ class PaybackManager extends AbstractManager
         );
 
         $query->execute([
-            'expenses_id' => $payback->getExpensesId(),
-            'from_user'   => $payback->getFromUser(),
-            'to_user'     => $payback->getToUser(),
-            'price'       => $payback->getPrice(),
-            'payed'       => $payback->isPayed()
+            'expenses_id'=> $payback->getExpensesId(),
+            'from_user'=> $payback->getFromUser(),
+            'to_user'=> $payback->getToUser(),
+            'price'=> $payback->getPrice(),
+            'payed'=> (int) $payback->isPayed()
         ]);
     }
 
@@ -98,12 +116,12 @@ class PaybackManager extends AbstractManager
         );
 
         $query->execute([
-            'id'          => $payback->getId(),
-            'expenses_id' => $payback->getExpensesId(),
-            'from_user'   => $payback->getFromUser(),
-            'to_user'     => $payback->getToUser(),
-            'price'       => $payback->getPrice(),
-            'payed'       => $payback->isPayed()
+            'id'=> $payback->getId(),
+            'expenses_id'=> $payback->getExpensesId(),
+            'from_user'=> $payback->getFromUser(),
+            'to_user'=> $payback->getToUser(),
+            'price'=> $payback->getPrice(),
+            'payed'=> (int) $payback->isPayed()
         ]);
     }
 

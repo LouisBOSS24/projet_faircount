@@ -4,54 +4,49 @@ class PaybackController extends AbstractController
 {
     public function create() :void
     {
-        if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] !== 'ADMIN') {
+        // Only logged users can create paybacks
+        if (!isset($_SESSION['id'])) {
             $this->redirect('index.php?route=login');
         }
-        else {
-            if(isset($_POST['firstName']) && !empty($_POST['firstName'])
-            && isset($_POST['lastName']) && !empty($_POST['lastName'])
-            && isset($_POST['email']) && !empty($_POST['email'])
-            && isset($_POST['password']) && !empty($_POST['password'])
-            && isset($_POST['confirmPassword']) && !empty($_POST['confirmPassword'])
-            && isset($_POST['role']) && !empty($_POST['role'])) {
-                
-                $emailUsed = false;
-                $userMan = new UserManager;
-                $users = $userMan->findAll();
-                foreach($users as $user){
-                    if($user->getEmail() === $_POST['email']){
-                        $emailUsed = true; 
-                    }
+
+        // Follow project style: check POST fields with isset and not empty
+        if (isset($_POST['expenses_id']) || isset($_POST['to_user']) || isset($_POST['price'])) {
+            if (isset($_POST['expenses_id'], $_POST['to_user'], $_POST['price']) && !empty($_POST['expenses_id']) && !empty($_POST['to_user']) && $_POST['price'] !== '') {
+                $expensesId = (int) $_POST['expenses_id'];
+                // The form selects the user who must PAY (debtor). Store that in fromUser.
+                $fromUser = (int) $_POST['to_user'];
+                // The session user is the recipient (creditor / to_user)
+                $toUser = (int) ($_SESSION['id'] ?? 0);
+                $price = (float) $_POST['price'];
+
+                if ($toUser <= 0) {
+                    $this->redirect('index.php?route=login');
                 }
-                if($emailUsed === true){
-                    $alrdyUse = ["L'email est déjà utilisé"];
-                    $this->render('admin/users/create.html.twig', ["alrdyUse"=>$alrdyUse]);
+
+                    if ($price <= 0) {
+                        $this->render('member/newPayback.html.twig', ['wrongAmount' => ['Montant invalide']]);
+                    return;
                 }
-                if ($_POST['password'] === $_POST['confirmPassword'] && $emailUsed != true){
-                    $hashedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
-                    $user = new User($_POST['firstName'], $_POST['lastName'], $_POST['email'], $_POST['password']);
-                    $user->setPassword($hashedPassword);
-                    $userMan->create($user);
-                    $this->redirect("index.php?route=list");
-                }
-                elseif ($emailUsed != true){
-                    $notSamePassword = ["Le mot de passe est différent"];
-                    $this->render('admin/users/create.html.twig', ["notSamePassword"=>$notSamePassword]);
-                }
+
+                $payback = new Payback($expensesId, $fromUser, $toUser, $price, false);
+                $paybackManager = new PaybackManager();
+                $paybackManager->create($payback);
+
+                $this->redirect('index.php');
+                return;
             }
-            elseif(isset($_POST['firstName']) && !empty($_POST['firstName'])
-            || isset($_POST['lastName']) && !empty($_POST['lastName'])
-            || isset($_POST['email']) && !empty($_POST['email'])
-            || isset($_POST['password']) && !empty($_POST['password'])
-            || isset($_POST['confirmPassword']) && !empty($_POST['confirmPassword'])
-            || isset($_POST['role']) && !empty($_POST['role'])) {
-                $missingField = ["Il manque un champ"];
-                $this->render('admin/users/create.html.twig', ["missingField"=>$missingField]);
-            }
-            else {
-                $this->render('admin/users/create.html.twig', []);
-            }
+
+                $this->render('member/newPayback.html.twig', ['missingField' => ['Il manque un champ']]);
+            return;
         }
+
+        // GET: render form
+        $expenseMan = new ExpenseManager();
+        $userMan = new UserManager();
+        $expenses = $expenseMan->findAll();
+        $users = $userMan->findAll();
+
+            $this->render('member/newPayback.html.twig', ['expenses' => $expenses, 'users' => $users]);
     }
 
     public function delete(int $id) : void
@@ -62,5 +57,34 @@ class PaybackController extends AbstractController
         else {
             $this->redirect("index.php?route=list");
         }
+    }
+
+    public function markAsPaid(int $id) : void
+    {
+        // Must be logged in
+        if (!isset($_SESSION['id'])) {
+            $this->redirect('index.php?route=login');
+        }
+
+        $paybackMan = new PaybackManager();
+        $payback = $paybackMan->findById($id);
+
+        if (!$payback) {
+            $this->redirect('index.php');
+        }
+
+        $currentUser = (int) ($_SESSION['id'] ?? 0);
+
+        // Only the beneficiary (to_user) can confirm payment received
+        if ($payback->getToUser() !== $currentUser) {
+            $this->redirect('index.php');
+        }
+
+        // Mark as paid then remove the record as requested
+        $payback->setPayed(true);
+        $paybackMan->update($payback);
+        $paybackMan->delete($payback);
+
+        $this->redirect('index.php');
     }
 }

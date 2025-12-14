@@ -8,7 +8,27 @@ class AuthController extends AbstractController
             $this->redirect('index.php?route=login');
         }
         else{
-            $this->render('home/home.html.twig', []);
+            $expenseMan = new ExpenseManager();
+            $expenses = $expenseMan->findAll();
+            $paybackMan = new PaybackManager();
+            $allPaybacks = $paybackMan->findAll();
+
+            $currentUserId = $_SESSION['id'] ?? null;
+            $duesTo = [];
+            $duesFrom = [];
+
+            if ($currentUserId !== null) {
+                foreach ($allPaybacks as $p) {
+                    if ($p->getFromUser() === $currentUserId) {
+                        $duesTo[] = $p;
+                    }
+                    if ($p->getToUser() === $currentUserId) {
+                        $duesFrom[] = $p;
+                    }
+                }
+            }
+
+            $this->render('home/home.html.twig', ['expenses' => $expenses, 'duesTo' => $duesTo, 'duesFrom' => $duesFrom]);
         }
     }
 
@@ -34,10 +54,12 @@ class AuthController extends AbstractController
                 if (password_verify($_POST['password'],$user->getPassword())){
                     $_SESSION["firstName"] = $user->getFirstName();
                     $_SESSION["lastName"] = $user->getLastName();
+                    $_SESSION["id"] = $user->getId();
                     $_SESSION["email"] = $user->getEmail();
                     $_SESSION["password"] = $user->getPassword();
                     $_SESSION["userRole"] = $user->getRole();
-                    $this->render('home/home.html.twig', []);
+                    // Redirect to the index so the Router will call home() which fetches and passes expenses
+                    $this->redirect('index.php');
                 }
                 else{
                     $wrongPassword = ["Mauvais mot de passe"];

@@ -1,6 +1,13 @@
 * {
     margin: 0;
     padding: 0;
+    text-decoration: none;
+}
+
+/* Page background and default text color */
+body {
+    background-color: rgb(53, 74, 82);
+    color: white;
 }
 
 header {
@@ -10,6 +17,7 @@ header {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    border-bottom: 4px solid rgb(37, 57, 66) ; 
 }
 
 header h1{
@@ -28,4 +36,109 @@ header ul{
     flex-direction: row;
     gap: 40px;
     list-style-type: none;
+}
+
+
+
+main .newExpense {
+    display: inline-block;
+    text-decoration: none;
+    color: white;
+    background-color: rgb(37, 57, 66);
+    margin: 20px;
+    padding: 6px;
+    font-size: 30px;
+    transition: transform 0.25s ease, background-color 0.25s ease;
+    cursor: pointer;
+}
+
+main .newExpense:hover {
+    transform: scale(1.08);
+    background-color: rgb(28, 48, 53);
+}
+
+main .newPayback {
+    display: inline-block;
+    text-decoration: none;
+    color: white;
+    background-color: rgb(37, 57, 66);
+    margin: 20px;
+    padding: 6px;
+    font-size: 30px;
+    transition: transform 0.25s ease, background-color 0.25s ease;
+    cursor: pointer;
+}
+
+main .newPayback:hover {
+    transform: scale(1.08);
+    background-color: rgb(28, 48, 53);
+}
+
+.dashboard .expenses {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 25px;
+}
+
+.expense table {
+    border: 3px solid rgb(37, 57, 66);
+    margin: 20px;
+    padding: 20px;
+}
+
+.expense th {
+    padding: 10px 30px;
+}
+
+.expense td {
+    padding: 10px 30px;
+}
+
+.dues-to table {
+    border: 3px solid rgb(37, 57, 66);
+    margin: 20px;
+    padding: 20px;
+}
+
+.dues-to th {
+    padding: 10px 30px;
+}
+
+.dues-to td {
+    padding: 10px 30px;
+}
+
+.payback {
+    margin-left: 50px;
+}
+.dues-from table {
+    border: 3px solid rgb(37, 57, 66);
+    margin: 20px;
+    padding: 20px;
+}
+
+.dues-from th {
+    padding: 10px 30px;
+}
+
+.dues-from td {
+    padding: 10px 30px;
+}
+
+form fieldset {
+    margin: 20px;
+    padding: 15px;
+    font-size: 25px;
+    border-radius: 30px;
+}
+
+button {
+    font-size: 25px;
+    margin-left: 50px;
+}
+
+input {
+    width: 300px;
+    height: 25px;
 }

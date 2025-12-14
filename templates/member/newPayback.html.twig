@@ -1,0 +1,47 @@
+{% extends "layout.html.twig" %}
+
+{% block header %}
+    {% include "partials/_header.html.twig" %}
+{% endblock %}
+
+{% block main %}
+    <main>
+        {% if missingField is defined and missingField.0 %}
+            <h4>{{ missingField.0 }}</h4>
+        {% endif %}
+
+        <h1>Ajouter un remboursement</h1>
+
+        <form method="post" action="index.php?route=newPayback">
+            <fieldset>
+                <label for="expenses_id">Dépense</label>
+                <select name="expenses_id" id="expenses_id" required>
+                    <option value="">-- Choisir --</option>
+                    {% for expense in expenses|default([]) %}
+                        <option value="{{ expense.getId() }}">{{ expense.getTitle() }} ({{ expense.getAmount() }} €)</option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+
+            <fieldset>
+                <label for="to_user">De ?</label>
+                <select name="to_user" id="to_user" required>
+                    <option value="">-- Choisir --</option>
+                    {% for user in users|default([]) %}
+                        <option value="{{ user.getId() }}">{{ user.getFirstName() }} {{ user.getLastName() }}</option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+
+            <fieldset>
+                {% if wrongAmount is defined and wrongAmount.0 %}
+                    <h4>{{ wrongAmount.0 }}</h4>
+                {% endif %}
+                <label for="price">Montant</label>
+                <input type="number" step="0.01" name="price" id="price" required>
+            </fieldset>
+
+            <button type="submit">Valider</button>
+        </form>
+    </main>
+{% endblock %}

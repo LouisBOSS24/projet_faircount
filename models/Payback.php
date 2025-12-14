@@ -8,7 +8,10 @@ class Payback
         private int $toUser,
         private float $price,
         private bool $payed = false,
-        private ?int $id = null
+        private ?int $id = null,
+        private ?string $fromUserFirstName = null,
+        private ?string $toUserFirstName = null,
+        private ?string $expenseTitle = null
     ) {
     }
 
@@ -70,5 +73,35 @@ class Payback
     public function setId(?int $id): void
     {
         $this->id = $id;
+    }
+    
+    public function getFromUserFirstName(): ?string
+    {
+        return $this->fromUserFirstName;
+    }
+
+    public function setFromUserFirstName(?string $name): void
+    {
+        $this->fromUserFirstName = $name;
+    }
+
+    public function getToUserFirstName(): ?string
+    {
+        return $this->toUserFirstName;
+    }
+
+    public function setToUserFirstName(?string $name): void
+    {
+        $this->toUserFirstName = $name;
+    }
+
+    public function getExpenseTitle(): ?string
+    {
+        return $this->expenseTitle;
+    }
+
+    public function setExpenseTitle(?string $title): void
+    {
+        $this->expenseTitle = $title;
     }
 }

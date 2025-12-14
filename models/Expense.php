@@ -8,7 +8,8 @@ class Expense
         private int $categoryId,
         private int $creator,
         private ?int $id = null,
-        private ?string $categoryName = null
+        private ?string $categoryName = null,
+        private ?string $creatorName = null
     ) {
     }
 
@@ -70,5 +71,15 @@ class Expense
     public function setCategoryName(?string $categoryName): void
     {
         $this->categoryName = $categoryName;
+    }
+
+    public function getCreatorName(): ?string
+    {
+        return $this->creatorName;
+    }
+
+    public function setCreatorName(?string $creatorName): void
+    {
+        $this->creatorName = $creatorName;
     }
 }

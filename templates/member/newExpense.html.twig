@@ -6,9 +6,9 @@
 
 {% block main %}
     <main>
-        {% if missingField.0 %}
-                <h4>{{ missingField.0 }}</h4>
-            {% endif %}
+        {% if missingField is defined and missingField.0 %}  {#'is devined and' généré par Github Copilot, Prompt : "pourquoi plus rien ne s'affiche j'ai une page blanche..."#}
+            <h4>{{ missingField.0 }}</h4>
+        {% endif %}
         <h1>Ajouter une dépense</h1>
         <form method="post" action="index.php?route=newExpense">
             <fieldset>
@@ -17,6 +17,9 @@
             </fieldset>
 
             <fieldset>
+                {% if wrongAmount is defined and wrongAmount.0 %} {#'is devined and' généré par Github Copilot, Prompt : "pourquoi plus rien ne s'affiche j'ai une page blanche..."#}
+                    <h4>{{ wrongAmount.0 }}</h4>
+                {% endif %}
                 <label for="amount">Prix</label>
                 <input type="number" step="0.01" name="amount" id="amount" required>
             </fieldset>
@@ -32,9 +35,7 @@
                 </select>
             </fieldset>
 
-            <fieldset>
-                <button type="submit">Valider</button>
-            </fieldset>
+            <button type="submit">Valider</button>
         </form>
     </main>
 {% endblock %}
